@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Spaceship</title>
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+  <style>
+    #spaceship {
+        width: 32px;
+        height: 31px;
+        position: absolute;
+        bottom: 30%;
+        left: 50%;
+        background: url("./images/spaceship.png");
+        background-repeat: no-repeat;
+    }
+    #laser {
+        width: 3px;
+        height: 15px;
+        background: red;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+    }
+  </style>
+  <script>
+    $(document).keydown(function(e){
+        switch (e.which) {
+            case 32:
+                var pos = $("#spaceship").offset();
+                $('#laser').remove();
+                $('body').append('<div id="laser"></div>');
+                var $laser = $('#laser');
+                
+                $laser
+                  .css('left', (pos.left + 14) + 'px')
+                  .css('top', (pos.top - 16) + 'px')
+                  .show();
+
+                pos = $laser.offset();
+                $laser.animate({
+                    top: "-15"
+                }, 'slow');
+                break;
+            // key left.
+            case 37:
+                $("#spaceship").animate({
+                    left: "-=20"
+                }, 100);
+                break;
+            // key up.    
+            case 38:
+                $("#spaceship").animate({
+                    top: "-=20"
+                }, 100);
+                break;
+            // key right.
+            case 39:
+                $("#spaceship").animate({
+                    left: "+=20"
+                }, 100);
+                break;
+            // key down.    
+            case 40:
+                var pos = $("#spaceship").offset();
+                var $doc = $(document);
+                
+                if (pos.top < $doc.height() - 100) {
+                    $("#spaceship").animate({
+                        top: "+=20"
+                    }, 100);
+                }
+                break;
+        }
+    });
+</script>
+</head>
+<body>
+  <div id="spaceship"></div>
+</body>
+</html>
