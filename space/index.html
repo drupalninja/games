@@ -52,43 +52,13 @@
                 left: $doc.width() - 140
             }, 5000);
         }
+        $(document).on('click', shootLaser);
     });
-    $(document).keydown(function(e){
+    $(document).keydown(function(e){        
         switch (e.which) {
             // Spacebar / laser shoot.
             case 32:
-                var audio = new Audio('./sounds/laser.mp3');
-                audio.play();
-
-                var pos = $("#spaceship").offset();
-                $('#laser').remove();
-                $('body').append('<div id="laser"></div>');
-                var $laser = $('#laser');
-                
-                $laser
-                  .css('left', (pos.left + 36) + 'px')
-                  .css('top', (pos.top - 16) + 'px')
-                  .show();
-
-                pos = $laser.offset();
-                $laser.animate({
-                    top: "-26"
-                }, {
-                    duration: 1000,
-                    progress: function () {
-                        var enemy_p = $('#enemy').offset();
-                        if (enemy_p) {
-                            var p = $laser.offset();
-                            
-                            if ((p.top < (enemy_p.top + 103)) && (p.left > enemy_p.left && p.left < enemy_p.left + 124)) {
-                                var audio = new Audio('./sounds/explode.mp3');
-                                audio.play();
-                                $laser.hide();
-                                $('#enemy').fadeOut().remove();
-                            }
-                        }
-                    }
-                });
+                shootLaser();
                 break;
             // key left.
             case 37:
@@ -121,6 +91,41 @@
                 break;
         }
     });
+
+    function shootLaser() {
+        var audio = new Audio('./sounds/laser.mp3');
+        audio.play();
+
+        var pos = $("#spaceship").offset();
+        $('#laser').remove();
+        $('body').append('<div id="laser"></div>');
+        var $laser = $('#laser');
+        
+        $laser
+            .css('left', (pos.left + 36) + 'px')
+            .css('top', (pos.top - 16) + 'px')
+            .show();
+
+        pos = $laser.offset();
+        $laser.animate({
+            top: "-26"
+        }, {
+            duration: 1000,
+            progress: function () {
+                var enemy_p = $('#enemy').offset();
+                if (enemy_p) {
+                    var p = $laser.offset();
+                    
+                    if ((p.top < (enemy_p.top + 103)) && (p.left > enemy_p.left && p.left < enemy_p.left + 124)) {
+                        var audio = new Audio('./sounds/explode.mp3');
+                        audio.play();
+                        $laser.hide();
+                        $('#enemy').fadeOut().remove();
+                    }
+                }
+            }
+        });
+    }
 </script>
 </head>
 <body>
