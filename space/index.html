@@ -37,12 +37,18 @@
         background: url("./images/boss.png");
         background-repeat: no-repeat;
     }
+    #enemy img {
+        display: none;
+    }
+    #enemy.explode img {
+        display: block;
+        position: absolute;
+        top: -10%;
+        left: -10%;
+    }
   </style>
   <script>
-    $(document).ready(function() {
-        var $enemy = $('#enemy');
-        var $doc = $(document);
-
+    function moveShip($enemy, $doc) {
         for (var c = 0; c < 9999; c++) {
             $enemy.animate({
                 left: "10"
@@ -52,8 +58,17 @@
                 left: $doc.width() - 140
             }, 5000);
         }
+    }
+
+    $(document).ready(function() {
+        var $enemy = $('#enemy');
+        var $doc = $(document);
+
+        moveShip($enemy, $doc);
+
         $(document).on('click', shootLaser);
     });
+
     $(document).keydown(function(e){        
         switch (e.which) {
             // Spacebar / laser shoot.
@@ -120,7 +135,14 @@
                         var audio = new Audio('./sounds/explode.mp3');
                         audio.play();
                         $laser.hide();
-                        $('#enemy').fadeOut().remove();
+                        $('#enemy').stop(true).addClass('explode').fadeOut('slow');
+                        setTimeout(function(){ $('#enemy').hide(); }, 200);
+                        setTimeout(function(){ 
+                            var $enemy = $('#enemy');
+                            var $doc = $(document);
+                            $enemy.removeClass('explode').fadeIn().css('left', 'calc(50% - 65px)'); 
+                            moveShip($enemy, $doc);
+                        }, 200);
                     }
                 }
             }
@@ -129,7 +151,9 @@
 </script>
 </head>
 <body>
-  <div id="enemy"></div>  
+  <div id="enemy">
+    <img src="./images/explode.png" width="150" height="142" alt="Explode" />
+  </div>
   <div id="spaceship"></div>
 </body>
 </html>
